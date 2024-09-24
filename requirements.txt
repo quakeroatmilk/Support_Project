@@ -1,0 +1,22 @@
+faker
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+plotly
+# surprise
+# scikit-surprise
+# lightfm
+implicit
+# sqlalchemy
+PyPDF2
+django
+transformers 
+pygwalker
+pdfplumber
+pytesseract
+pdf2image
+spacy
+torch
+gunicorn
