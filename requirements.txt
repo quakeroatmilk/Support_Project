@@ -18,5 +18,4 @@ pdfplumber
 pytesseract
 pdf2image
 spacy
-torch
 gunicorn

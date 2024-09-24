@@ -22,7 +22,6 @@ import spacy
 import pytesseract
 from PIL import Image
 from pdf2image import convert_from_path
-import torch
 import pytesseract
 from .models import CorporateInfo, ShareCapital, Directors, Shareholders, FinancialInfo
 from django.core.files.storage import FileSystemStorage
