@@ -1,0 +1,61 @@
+[
+    {"agency": "Suruhanjaya Koperasi Malaysia", 
+     "supports": "Grant programs, cooperative development support, advisory services", 
+     "business_type": "Cooperatives, SMEs",
+     "portal_link": "https://www.skm.gov.my/", 
+     "logo": "static/logos/SKM.jpg"},
+
+    {"agency": "Institut Koperasi Malaysia", 
+     "supports": "Training programs, research and development, capacity building", 
+     "business_type": "Cooperatives, SMEs, Startups",
+     "portal_link": "https://www.ikma.edu.my/", 
+     "logo": "static/logos/IKMA.jpg"},
+
+    {"agency": "SME Corp Malaysia", 
+     "supports": "Grants, business development services, advisory services, market access programs", 
+     "business_type": "SMEs, Startups, Innovative and High-Growth Businesses",
+     "portal_link": "https://www.smecorp.gov.my/", 
+     "logo": "static/logos/SMECORP.jpg"},
+
+    {"agency": "Tekun Nasional", 
+     "supports": "Microfinancing, business loans, advisory services, entrepreneurial training", 
+     "business_type": "Microenterprises, SMEs, Startups",
+     "portal_link": "https://www.tekun.gov.my/", 
+     "logo": "static/logos/TEKUN.jpg"},
+
+    {"agency": "Institut Keusahawanan Negara", 
+     "supports": "Entrepreneurial training, business coaching, incubation programs", 
+     "business_type": "Startups, SMEs, Innovative and High-Growth Businesses",
+     "portal_link": "https://www.insken.gov.my/", 
+     "logo": "static/logos/INSKEN.png"},
+
+    {"agency": "Bank Rakyat", 
+     "supports": "Business loans, microfinancing, savings and investment services", 
+     "business_type": "SMEs, Cooperatives, Individuals",
+     "portal_link": "https://www.bankrakyat.com.my/", 
+     "logo": "static/logos/BRAKYAT.jpg"},
+
+    {"agency": "SME Bank", 
+     "supports": "Business financing, advisory services, business development programs", 
+     "business_type": "SMEs, Startups, Social Enterprises",
+     "portal_link": "https://www.smebank.com.my/", 
+     "logo": "static/logos/SMEBANK.jpg"},
+
+    {"agency": "UDA Holding Berhad", 
+     "supports": "Property development support, business premises, advisory services", 
+     "business_type": "Property Development Companies, SMEs, Startups",
+     "portal_link": "https://www.uda.com.my/", 
+     "logo": "static/logos/UDA.png"},
+
+    {"agency": "Perbadanan Nasional Berhad", 
+     "supports": "Franchise development support, financing for franchise businesses, advisory services", 
+     "business_type": "Franchise Businesses, SMEs, Startups",
+     "portal_link": "https://pernas.my/", 
+     "logo": "static/logos/PERNAS.png"},
+
+    {"agency": "Amanah Ikhtiar Malaysia", 
+     "supports": "Microfinancing, entrepreneurial training, capacity building programs", 
+     "business_type": "Microenterprises, Women Entrepreneurs, SMEs",
+     "portal_link": "https://www.aim.gov.my/", 
+     "logo": "static/logos/AIM.png"}
+]
