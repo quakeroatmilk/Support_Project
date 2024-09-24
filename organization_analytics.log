@@ -1,0 +1,3 @@
+2024-09-13 12:03:00,811 - ERROR - Error during PDF to text conversion: 'Settings' object has no attribute 'POPPLER_PATH'
+2024-09-13 12:03:10,833 - ERROR - Error during PDF to text conversion: 'Settings' object has no attribute 'POPPLER_PATH'
+2024-09-13 12:03:24,505 - INFO - C:\Users\BLESS - AZLINA\Desktop\support_entre\support_project\mysupportapp\views.py changed, reloading.
