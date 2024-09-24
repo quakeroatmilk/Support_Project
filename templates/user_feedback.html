@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}
+    User Feedback - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+    <!-- Main content container -->
+    <div class="container">
+        <h2>User Feedback</h2>
+
+        <!-- Success Message -->
+        {% if msg %}
+            <div class="success-message">{{ msg }}</div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'user_feedback' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="feedback_type">Feedback Type:</label>
+                    <select id="feedback_type" name="feedback_type" required>
+                        <option value="Recommendation">Recommendation System</option>
+                        <option value="Prediction">Prediction Analysis</option>
+                        <option value="Other">Profile Analytics</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="rating">Rating:</label>
+                    <div class="rating-group">
+                        <input type="radio" id="rating1" name="rating" value="1">
+                        <label for="rating1">1</label>
+                        <input type="radio" id="rating2" name="rating" value="2">
+                        <label for="rating2">2</label>
+                        <input type="radio" id="rating3" name="rating" value="3">
+                        <label for="rating3">3</label>
+                        <input type="radio" id="rating4" name="rating" value="4">
+                        <label for="rating4">4</label>
+                        <input type="radio" id="rating5" name="rating" value="5">
+                        <label for="rating5">5</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="comments">Message:</label>
+                    <textarea id="comments" name="comments" required></textarea>
+                </div>
+            </div>
+            <button type="submit">Submit Feedback</button>
+        </form>
+
+        <div class="chart-container">
+            {% if sentiment_graphJSON %}
+            <div id="sentiment-chart" class="chart">
+                <h3>Sentiment Analysis Results</h3>
+                <div id="graph"></div> <!-- Placeholder for the sentiment analysis chart -->
+            </div>
+            {% endif %}
+        
+            {% if rating_graphJSON %}
+            <div id="rating-summary" class="chart">
+                <h3>Ratings Summary</h3>
+                <div id="rating-graph"></div> <!-- Placeholder for the ratings summary chart -->
+            </div>
+            {% endif %}
+        </div>
+
+        <style>
+            .chart-container {
+                display: flex;
+                justify-content: space-between;
+                gap: 40px; /* Increased gap for better spacing */
+                margin-top: 40px;
+            }
+        
+            .chart {
+                flex: 1;
+                min-width: 45%; /* Ensures each chart takes up close to half of the space */
+            }
+        
+            h3 {
+                font-size: 18px;
+                color: #1A3353;
+                margin-bottom: 10px;
+                text-align: center;
+            }
+        
+            /* Chart Titles */
+            #sentiment-chart h3, #rating-summary h3 {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+                color: #1A3353; /* Dark Blue Title */
+                font-size: 18px;
+                text-transform: uppercase;
+            }
+        
+            #graph, #rating-graph {
+                width: 100%;
+                height: 400px; /* Adjust height for better visibility */
+            }
+        </style>
+        
+        <!-- Feedback Summary Section -->
+        {% if top_positive_comments or top_negative_comments %}
+        <div class="feedback-summary">
+            <div class="summary-box">
+                <h3>Average Rating</h3>
+                <p>{{ average_rating }} / 5</p>
+            </div>
+            <div class="summary-box">
+                <h3>Top Positive Comments</h3>
+                <ul class="comments-list">
+                    {% for comment in top_positive_comments %}
+                    <li>{{ comment }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="summary-box">
+                <h3>Top Negative Comments</h3>
+                <ul class="comments-list">
+                    {% for comment in top_negative_comments %}
+                    <li>{{ comment }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <span>Email: bless1.0@kuskop.gov.my (Pengguna BLESS 1.0) | bless2.0@kuskop.gov.my (Pengguna BLESS 2.0)</span>
+            <span> | </span>
+            <span>Phone: 1-300-88-1020</span>
+        </div>
+    </div>
+
+    <!-- Plotly JS for displaying the sentiment and rating charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        // Sentiment Analysis Chart
+        {% if sentiment_graphJSON %}
+        var sentiment_data = {{ sentiment_graphJSON | safe }};
+        var sentiment_layout = {
+            title: {
+                text: 'Sentiment Analysis by Feedback Type',
+                font: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 16,
+                    color: '#1A3353' // Dark Blue
+                },
+            },
+            xaxis: {
+                title: 'Sentiment',
+                titlefont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                },
+                tickfont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                }
+            },
+            yaxis: {
+                title: 'Percentage',
+                titlefont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                },
+                tickfont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                }
+            },
+            colorway: ['#941919', '#1A3353'], // Dark Red and Dark Blue for sentiment bars
+            paper_bgcolor: '#ffffff',
+            plot_bgcolor: '#f4f4f4',
+            margin: { t: 40, l: 40, r: 40, b: 40 },
+            bargap: 0.2 // Adjust bar spacing if needed
+        };
+        Plotly.newPlot('graph', sentiment_data, sentiment_layout);
+        {% endif %}
+        
+        // Rating Summary Chart
+        {% if rating_graphJSON %}
+        var rating_data = {{ rating_graphJSON | safe }};
+        var rating_layout = {
+            title: {
+                text: 'Rating Summary',
+                font: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 16,
+                    color: '#1A3353' // Dark Blue
+                },
+            },
+            xaxis: {
+                title: 'Rating',
+                titlefont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                },
+                tickfont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                }
+            },
+            yaxis: {
+                title: 'Count',
+                titlefont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                },
+                tickfont: {
+                    family: 'Helvetica Neue, Arial, sans-serif',
+                    size: 12,
+                    color: '#1A3353'
+                }
+            },
+            colorway: ['#1A3353'], // Dark Blue for rating bars
+            paper_bgcolor: '#ffffff',
+            plot_bgcolor: '#f4f4f4',
+            margin: { t: 40, l: 40, r: 40, b: 40 },
+            bargap: 0.2 // Adjust bar spacing if needed
+        };
+        Plotly.newPlot('rating-graph', rating_data, rating_layout);
+        {% endif %}
+    </script>
+    <script>
+        window.embeddedChatbotConfig = {
+        chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+        domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+        domain="www.chatbase.co"
+        defer>
+    </script>    
+{% endblock %}

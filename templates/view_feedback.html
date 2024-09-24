@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Feedback Results - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+    <!-- Main content container -->
+    <div class="container">
+        <h2>Feedback Results</h2>
+
+        <!-- Display Results -->
+        <div class="feedback-container">
+            <div class="chart-container">
+                <div id="graph" class="chart"></div>
+                <div id="rating-graph" class="chart"></div>
+            </div>
+
+            <!-- Top Comments Section -->
+            <center><h2>Top Comments</h2></center>
+            <div class="feedback-summary">
+                <div class="summary-box positive-comments">
+                    <h4>Top Positive Comments</h4>
+                    <ul class="comments-list">
+                        {% for comment in top_positive_comments %}
+                        <li>{{ comment }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="summary-box negative-comments">
+                    <h4>Top Negative Comments</h4>
+                    <ul class="comments-list">
+                        {% for comment in top_negative_comments %}
+                        <li>{{ comment }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <center>
+                <a href="{% url 'user_feedback' %}" style="text-decoration: underline; color: #6c757d; font-size: 16px; margin-top: 30px; display: inline-block;">Back to Feedback Form</a>
+            </center>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <span>Email: bless1.0@kuskop.gov.my | bless2.0@kuskop.gov.my | Phone: 1-300-88-1020</span>
+        </div>
+    </div>
+
+<!-- Plotly JS for displaying the sentiment and rating charts -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>    
+
+    <script>
+        // Sentiment Analysis Chart
+        // Sentiment Analysis Chart
+    // Sentiment Analysis Chart
+var sentiment_data = {{ sentiment_graphJSON | safe }};
+
+var sentiment_layout = {
+    title: 'Sentiment Analysis by Feedback Type',
+    width: 360,
+    height: 400,
+    xaxis: {
+        title: 'Sentiment',
+        titlefont: {size: 16, color: '#333', family: 'Arial, sans-serif'},
+        tickfont: {size: 14, color: '#666'},
+    },
+    yaxis: {
+        title: 'Percentage',
+        titlefont: {size: 16, color: '#333', family: 'Arial, sans-serif'},
+        tickfont: {size: 14, color: '#666'},
+    },
+    margin: { t: 50, l: 50, r: 50, b: 50 },
+    bargap: 0.2,
+    paper_bgcolor: '#f4f4f4',
+    plot_bgcolor: '#f4f4f4',
+    annotations: []  // Empty array for annotations
+};
+
+// Add percentage annotations to each bar
+var sentiment_percentages = sentiment_data.data[0].y;  // Get the sentiment percentages
+sentiment_percentages.forEach((percentage, index) => {
+    sentiment_layout.annotations.push({
+        x: sentiment_data.data[0].x[index],  // X position (Sentiment Type: Positive/Negative)
+        y: percentage,  // Y position (Percentage Value)
+        text: percentage.toFixed(1) + '%',  // Display text (percentage with 1 decimal)
+        showarrow: false,  // No arrow
+        font: {
+            size: 14,
+            color: '#333'
+        },
+        xanchor: 'center',  // Center the text horizontally
+        yanchor: 'bottom'  // Position the text above the bar
+    });
+});
+
+// Set colors for the bars in sentiment analysis chart
+var sentiment_traces = sentiment_data.data.map(trace => {
+    trace.marker = {
+        color: ['#63b6e5', '#b19cd9']  // Specify the colors you want for each bar
+    };
+    return trace;
+});
+
+// Initial Plot
+Plotly.newPlot('graph', sentiment_traces, sentiment_layout);
+
+// Find the index of the highest sentiment value
+var max_sentiment_index = sentiment_percentages.indexOf(Math.max(...sentiment_percentages));  // Get the index of the highest sentiment value
+var blinkStateSentiment = true;  // Toggle state for blinking the highest sentiment bar
+
+// Blinking effect for the highest sentiment bar
+setInterval(() => {
+    var newColors = sentiment_traces[0].marker.color.map((color, index) => 
+        index === max_sentiment_index ? (blinkStateSentiment ? '#63b6e5' : '#ffffff') : color  // Blink between the original color and white
+    );
+    
+    Plotly.restyle('graph', {
+        'marker.color': [newColors]
+    });
+    blinkStateSentiment = !blinkStateSentiment;  // Toggle the state
+}, 1000);  // Blinking every 1 second
+
+
+    // Rating Summary Pie Chart
+    var rating_data = {{ rating_graphJSON | safe }};
+    var totalRatings = rating_data.data[0].y.reduce((a, b) => a + b, 0);
+    var rating_percentages = rating_data.data[0].y.map(count => (count / totalRatings) * 100);
+
+    var rating_pie_trace = [{
+        values: rating_percentages,
+        labels: rating_data.data[0].x,
+        type: 'pie',
+        hoverinfo: 'label+percent',
+        textinfo: 'label+percent',
+        marker: {
+            colors: ['#63b6e5', '#ffc107', '#6f42c1', '#b19cd9', '#17a2b8']  // Pie slice colors
+        }
+    }];
+
+    var rating_layout = {
+        title: 'Rating Summary (Percentage)',
+        width: 370,
+        height: 400,
+        margin: { t: 50, l: 50, r: 50, b: 50 },
+        paper_bgcolor: '#f4f4f4',
+        plot_bgcolor: '#f4f4f4',
+    };
+
+    // Plot the pie chart
+    Plotly.newPlot('rating-graph', rating_pie_trace, rating_layout);
+
+    // Find the highest value slice and make it blink
+    var max_value_index = rating_percentages.indexOf(Math.max(...rating_percentages));  // Get the index of the highest value
+    var blinkStatePie = true;  // Toggle state for blinking the highest slice
+
+    setInterval(() => {
+        // Blink the slice with the highest value
+        var newColors = rating_pie_trace[0].marker.colors.map((color, index) => 
+            index === max_value_index ? (blinkStatePie ? '#17a2b8' : '#ffffff') : color  // Blink between red and white
+        );
+        
+        Plotly.restyle('rating-graph', {
+            'marker.colors': [newColors]
+        });
+        blinkStatePie = !blinkStatePie;  // Toggle the state
+    }, 1000);  // Blinking every 1 second
+</script>
+
+<script>
+    // Rating Summary Pie Chart
+    var rating_data = {{ rating_graphJSON | safe }};
+    var totalRatings = rating_data.data[0].y.reduce((a, b) => a + b, 0);
+    var rating_percentages = rating_data.data[0].y.map(count => (count / totalRatings) * 100);
+
+    var rating_pie_trace = [{
+        values: rating_percentages,
+        labels: rating_data.data[0].x,
+        type: 'pie',
+        hoverinfo: 'label+percent',
+        textinfo: 'label+percent',
+        marker: {
+            colors: ['#63b6e5', '#ffc107', '#6f42c1', '#b19cd9', '#17a2b8']
+        }
+    }];
+
+    var rating_layout = {
+        title: 'Rating Summary (Percentage)',
+        width: 370,
+        height: 400,
+        margin: { t: 50, l: 50, r: 50, b: 50 },
+        paper_bgcolor: '#f4f4f4',
+        plot_bgcolor: '#f4f4f4',
+    };
+
+    // Initial Plot
+    Plotly.newPlot('rating-graph', rating_pie_trace, rating_layout);
+
+    // Enhanced Animation for Pie Chart
+    setTimeout(() => {
+        Plotly.animate('rating-graph', {
+            data: rating_pie_trace,
+            layout: rating_layout
+        }, {
+            transition: {
+                duration: 2000,  // 2 second transition for smooth effect
+                easing: 'elastic-in-out'  // Elastic effect for pie chart
+            },
+            frame: {
+                duration: 1000  // Smooth frame transition
+            }
+        });
+    }, 1000);  // Delay to start animation
+</script>
+
+
+    <script>
+        window.embeddedChatbotConfig = {
+        chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+        domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+        domain="www.chatbase.co"
+        defer>
+    </script>  
+
+{% endblock %}

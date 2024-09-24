@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Prediction Result - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="text-align: center;">
+        <h2>Prediction Result</h2>
+
+        <!-- Prediction Result Box -->
+        <div class="prediction-result" style="display: flex; justify-content: center; align-items: center; flex-direction: column; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); margin-bottom: 30px; max-width: 700px; margin: 0 auto;">
+            
+            <!-- Progress Circle -->
+            <div class="progress-circle" style="position: relative; margin: 20px 0;">
+                <svg width="300" height="300" viewBox="0 0 160 160">
+                    <circle class="bg" cx="80" cy="80" r="70" stroke-width="15" style="stroke: #e0e0e0;"></circle>
+                    <circle class="progress" id="progress-circle" cx="80" cy="80" r="70" stroke-width="15" 
+                        style="stroke: 
+                            {% if prediction >= 75 %}
+                                #9B59B6; /* Purple */
+                            {% elif prediction >= 50 %}
+                                #17a2b8; /* Yellow */
+                            {% else %}
+                                #E4080A; /* Blue */
+                            {% endif %};
+                            stroke-dasharray: 440; stroke-dashoffset: 440; stroke-linecap: round;">
+                    </circle>
+                </svg>
+                <div class="text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 28px; font-weight: bold; color: #333;">{{ prediction }}%</div>
+            </div>
+
+            <!-- Caution Message (within the same box as prediction result) -->
+            <div class="prediction-explanation" style="text-align: center; margin-top: 20px;">
+                {% if prediction >= 75 %}
+                    <span style="color:#9B59B6; font-size: 20px;">&#10004;</span> Excellent! Your business has a high chance of success.
+                {% elif prediction >= 50 %}
+                    <span style="color:#17a2b8; font-size: 20px;">&#9888;</span> Good! There is a moderate chance of success. Consider optimizing certain areas.
+                {% else %}
+                    <span style="color:#E4080A; font-size: 20px;">&#10060;</span> Caution! Your business may face challenges. It's advisable to review your strategies.
+                {% endif %}
+            </div>
+        </div>
+
+        <br>
+
+        <!-- Suggestions and How to Improve Box (Styled as Cards) -->
+        <div class="suggestions-container" style="display: flex; justify-content: space-between; gap: 20px; margin-bottom: 30px; max-width: 750px; margin: 0 auto;">
+            
+            <!-- Suggestions Section -->
+            <div class="suggestion-box" style="flex: 1; background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);">
+                <h4 style="font-size: 22px; font-weight: bold; color: #333; margin-bottom: 10px;">Suggestions</h4>
+                <p>
+                {% if prediction >= 75 %}
+                    Keep up the good work! You can further enhance your business by exploring international markets, strengthening brand presence, and increasing operational efficiency.
+                {% elif prediction >= 50 %}
+                    Focus on improving your business model. Consider optimizing certain areas such as marketing, customer retention, and expanding your financing options.
+                {% else %}
+                    Reassess your strategies! Look into obtaining more support like grants or financing, and consider adjusting your business approach.
+                {% endif %}
+                </p>
+            </div>
+            
+            <!-- How to Improve Section -->
+            <div class="improve-box" style="flex: 1; background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);">
+                <h4 style="font-size: 22px; font-weight: bold; color: #333; margin-bottom: 10px;">How to Improve</h4>
+                <ul style="list-style-type: disc; text-align: left; padding-left: 20px; font-size: 16px; color: #333;">
+                    {% if prediction >= 75 %}
+                        <li>Leverage your success by investing in automation and innovation.</li>
+                        <li>Continue to build customer loyalty through high-quality service.</li>
+                        <li>Expand into new markets or product lines.</li>
+                    {% elif prediction >= 50 %}
+                        <li>Focus on improving your customer acquisition strategy.</li>
+                        <li>Consider reducing operational costs and improving product or service quality.</li>
+                        <li>Increase your presence in social media and digital marketing.</li>
+                    {% else %}
+                        <li>Attend more business and marketing trainings to boost skills.</li>
+                        <li>Seek advisory services to review your current business strategies.</li>
+                        <li>Apply for financial support or grants to improve your cash flow.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Back to Prediction Form -->
+        <center>
+            <a href="{% url 'prediction_analysis' %}" style="text-decoration: underline; color: #6c757d; font-size: 16px; margin-top: 30px; display: inline-block;">Back to Prediction Form</a>
+        </center>
+    </div>
+
+    <!-- Animated Counter Script and Circle Animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const counter = document.querySelector('.progress-circle .text');
+            const progressCircle = document.getElementById('progress-circle');
+            const target = parseFloat(counter.textContent);
+            const strokeDashArray = 440;
+            const strokeDashOffset = strokeDashArray - (strokeDashArray * target / 100);
+            
+            // Animate counter
+            let count = 0;
+            const increment = target / 100; // Adjust the speed here
+
+            const updateCounter = () => {
+                if (count < target) {
+                    count += increment;
+                    counter.textContent = Math.round(count) + '%';
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target.toFixed(2) + '%';
+                }
+            };
+
+            updateCounter();
+
+            // Animate the progress circle stroke
+            progressCircle.style.transition = 'stroke-dashoffset 1.5s ease';
+            progressCircle.style.strokeDashoffset = strokeDashOffset;
+        });
+    </script>
+
+    <!-- Embedded Chatbot Script -->
+    <script>
+        window.embeddedChatbotConfig = {
+            chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+            domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+        domain="www.chatbase.co"
+        defer>
+    </script> 
+
+{% endblock %}

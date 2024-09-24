@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Prediction Analytic - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+    <!-- Main content container -->
+    <div class="container">
+        <h2>Prediction Analytic</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="business_type">Business Type:</label>
+                    <select id="business_type" name="business_type">
+                        {% for type in business_types %}
+                            <option value="{{ type }}" {% if type == selected_business_type %}selected{% endif %}>{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="industry">Industry:</label>
+                    <select id="industry" name="industry">
+                        {% for industry in industries %}
+                            <option value="{{ industry }}" {% if industry == selected_industry %}selected{% endif %}>{{ industry }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <select id="location" name="location">
+                        {% for location in locations %}
+                            <option value="{{ location }}" {% if location == selected_location %}selected{% endif %}>{{ location }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="years_in_operation">Years in Operation:</label>
+                    <input type="number" id="years_in_operation" name="years_in_operation" placeholder="Enter years in operation" value="{{ years_in_operation }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="grant_amount">Grant Amount:</label>
+                    <input type="number" id="grant_amount" name="grant_amount" placeholder="Enter grant amount (MYR)" value="{{ grant_amount }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="number_of_trainings">Number of Trainings:</label>
+                    <input type="number" id="number_of_trainings" name="number_of_trainings" placeholder="Enter number of trainings" value="{{ number_of_trainings }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="advisory_sessions">Advisory Sessions:</label>
+                    <input type="number" id="advisory_sessions" name="advisory_sessions" placeholder="Enter number of advisory sessions" value="{{ advisory_sessions }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="microfinancing">Microfinancing:</label>
+                    <select id="microfinancing" name="microfinancing">
+                        <option value="Yes" {% if microfinancing == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if microfinancing == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="business_dev_services">Business Development Services:</label>
+                    <select id="business_dev_services" name="business_dev_services">
+                        <option value="Yes" {% if business_dev_services == "Yes" %}selected{% endif %}>Yes</option>
+                        <option value="No" {% if business_dev_services == "No" %}selected{% endif %}>No</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit">Predict Success Rate</button>
+        </form>
+
+        {% if prediction is not none %}
+        <div class="prediction-result 
+        {% if prediction >= 75 %}
+            prediction-high
+        {% elif prediction >= 50 %}
+            prediction-medium
+        {% else %}
+            prediction-low
+        {% endif %}
+    ">
+        <h3>Predicted Success Rate</h3>
+        <div class="progress-circle" title="This percentage represents the likelihood of your business succeeding based on the provided data.">
+            <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle class="bg" cx="80" cy="80" r="70" stroke-width="15"></circle>
+                <circle class="progress" cx="80" cy="80" r="70" stroke-width="15"></circle>
+            </svg>
+            <div class="text">{{ prediction }}%</div>
+        </div>
+    
+        <div class="prediction-explanation">
+            {% if prediction >= 75 %}
+                <span style="color:#28a745;">&#10004;</span> Excellent! Your business has a high chance of success.
+            {% elif prediction >= 50 %}
+                <span style="color:#ffc107;">&#9888;</span> Good! There is a moderate chance of success. Consider optimizing certain areas.
+            {% else %}
+                <span style="color:#dc3545;">&#10060;</span> Caution! Your business may face challenges. It's advisable to review your strategies.
+            {% endif %}
+        </div>
+    </div>
+        {% endif %}
+    </div>
+
+    <!-- Animated Counter Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const counter = document.querySelector('.progress-circle .text');
+            const target = parseInt(counter.textContent);
+            let count = 0;
+            const increment = target / 50; // Adjust the speed here
+    
+            const updateCounter = () => {
+                if (count < target) {
+                    count += increment;
+                    counter.textContent = Math.round(count) + '%';
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target + '%';
+                }
+            };
+    
+            updateCounter();
+        });
+    </script>
+    
+    <script>
+        window.embeddedChatbotConfig = {
+        chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+        domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+        domain="www.chatbase.co"
+        defer>
+    </script> 
+{% endblock %}

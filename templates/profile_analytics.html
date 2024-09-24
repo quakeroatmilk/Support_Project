@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Profile Analytics - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+    <!-- Main content container -->
+    <div class="container">
+        <h2>Profile Analytics Dashboard</h2>
+        <div>
+            {{ pygwalker | safe }}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <span>Email: bless1.0@kuskop.gov.my (Pengguna BLESS 1.0) | bless2.0@kuskop.gov.my (Pengguna BLESS 2.0)</span>
+            <span> | </span>
+            <span>Phone: 1-300-88-1020</span>
+        </div>
+    </div>
+
+    <script>
+        window.embeddedChatbotConfig = {
+        chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+        domain: "www.chatbase.co"
+        }
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+        domain="www.chatbase.co"
+        defer>
+    </script>   
+{% endblock %}

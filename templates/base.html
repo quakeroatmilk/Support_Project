@@ -1,0 +1,51 @@
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM{% endblock %}</title>
+    
+    <!-- Static CSS file -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Main header with logo and title -->
+    <div class="header">
+        <!-- Use Django's static template tag to load images -->
+        <img src="{% static 'logos/jata.png' %}" alt="Jata Logo" class="jata-logo">
+        <div class="header-content">
+            <h1>AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM</h1>
+            <h2>Empowering Entrepreneurs with Advanced Technology</h2>
+        </div>
+        <img src="{% static 'logos/BLESS.png' %}" alt="BLESS Logo">
+    </div>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        <a href="/">Recommendation System</a>
+        <a href="/prediction-analysis">Prediction Analytics</a>
+        <a href="/organization_analytics">Organization Analytics</a>
+        <a href="/profile-analytics">Data Analytics</a>
+        <a href="/user-feedback">User Feedback</a>
+    </div>
+
+    <!-- Dynamic content block -->
+    <div class="container">
+        {% block content %}
+        <!-- Content specific to each page will go here -->
+        {% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <span>Email: bless@kuskop.gov.my</span>
+            <span> | </span>
+            <span>Phone: 1-300-88-1020</span>
+        </div>
+    </div>
+
+    <!-- Static JavaScript file -->
+    <script src="{% static 'js/common.js' %}"></script>
+</body>
+</html>

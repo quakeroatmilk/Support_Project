@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Organization Analytics - AI DRIVEN ENTREPRENEUR SUPPORT SYSTEM
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Company Age Evaluation Section -->
+    <div class="company-age-section">
+        <h3>Company Age Evaluation</h3>
+        <!-- Company Age Message Box -->
+        <div class="card text-center bg-light mb-4 compact-message-box">
+            <div class="card-body">
+                <p class="card-text" id="companyAgeMessage"></p>
+            </div>
+        </div>
+        <!-- Graph for Age Evaluation Criteria -->
+        <div class="company-age-criteria-chart">
+            <canvas id="companyAgeCriteriaChart" width="400" height="100"></canvas>
+        </div>
+    </div>
+
+    <!-- Row for Corporate and Financial Information -->
+    <div class="row">
+        <!-- Corporate Information Box -->
+        <div class="col-md-6">
+            <div class="card bg-light mb-3 compact-card">
+                <div class="card-body">
+                    <h5 class="card-title">Corporate Information</h5>
+                    <p><strong>Company Name:</strong> {{ analysis.corporate_info.company_name }}</p>
+                    <p><strong>Company Number:</strong> {{ analysis.corporate_info.company_number }}</p>
+                    <p><strong>Incorporation Date:</strong> {{ analysis.corporate_info.incorporation_date }}</p>
+                    <p><strong>Registration Date:</strong> {{ analysis.corporate_info.registration_date }}</p>
+                    <p><strong>Registered Address:</strong> {{ analysis.corporate_info.registered_address }}</p>
+                    <p><strong>Business Address:</strong> {{ analysis.corporate_info.business_address }}</p>
+                    <p><strong>Nature of Business:</strong> {{ analysis.corporate_info.nature_of_business }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Information Box -->
+        <div class="col-md-6">
+            <div class="card bg-light mb-3 compact-card">
+                <div class="card-body">
+                    <h5 class="card-title">Financial Information</h5>
+                    <p><strong>Non-current Assets:</strong> {{ analysis.financial_info.non_current_assets }}</p>
+                    <p><strong>Current Assets:</strong> {{ analysis.financial_info.current_assets }}</p>
+                    <p><strong>Non-current Liabilities:</strong> {{ analysis.financial_info.non_current_liabilities }}</p>
+                    <p><strong>Current Liabilities:</strong> {{ analysis.financial_info.current_liabilities }}</p>
+                    <p><strong>Share Capital:</strong> {{ analysis.financial_info.share_capital }}</p>
+                    <p><strong>Retained Earnings:</strong> {{ analysis.financial_info.retained_earnings }}</p>
+                    <p><strong>Revenue:</strong> {{ analysis.financial_info.revenue }}</p>
+                    <p><strong>Profit Before Tax:</strong> {{ analysis.financial_info.profit_before_tax }}</p>
+                    <p><strong>Profit After Tax:</strong> {{ analysis.financial_info.profit_after_tax }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Link -->
+    <center>
+        <a href="{% url 'upload_pdf' %}" style="text-decoration: underline; color: #6c757d; font-size: 16px; margin-top: 30px; display: inline-block;">Back to Upload PDF Form</a>
+    </center>
+
+</div>
+
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Script for Company Age Evaluation
+window.onload = function() {
+    const companyAge = {{ analysis.company_age|default:0 }};
+    const companyEvaluation = "{{ analysis.company_evaluation|default:'Not available' }}";
+    const ctxCriteria = document.getElementById('companyAgeCriteriaChart').getContext('2d');
+
+    const criteriaData = {
+        labels: ['Young Startup', 'Growing Business', 'Established Company'],
+        datasets: [{
+            label: 'Evaluation Criteria',
+            data: [5, 10, 20],  // Length of each evaluation period
+            backgroundColor: ['#7d3dc1', '#7fcaf0', '#23a3be'],
+            borderWidth: 1,
+        }]
+    };
+
+    // Create the chart
+    new Chart(ctxCriteria, {
+        type: 'bar',
+        data: criteriaData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 30,
+                    title: {
+                        display: true,
+                        text: 'Years'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    enabled: true
+                }
+            }
+        }
+    });
+
+    // Display company age message
+    const ageMessage = document.getElementById('companyAgeMessage');
+    ageMessage.innerHTML = `🚀 <strong>${companyEvaluation}!</strong> The company is <strong>${companyAge} years old</strong>.`;
+};
+</script>
+
+<!-- Custom CSS -->
+<style>
+    .company-age-section {
+        text-align: center;
+        margin-top: 20px;
+    }
+    /* Box style for the company age message */
+    .compact-message-box {
+        font-size: 1.1rem;
+        line-height: 1.5;
+        border: 1px solid #ddd;
+        background-color: #f8f9fa;
+        padding: 10px;
+    }
+    .company-age-criteria-chart {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        height: 300px;
+    }
+    canvas {
+        max-width: 100%;
+        height: 100%;
+    }
+    .row {
+        margin-top: 40px;
+    }
+    .compact-card {
+        font-size: 0.9rem;
+        line-height: 1.2;
+    }
+    .compact-card p {
+        margin-bottom: 0.5rem;
+    }
+    .compact-card .card-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    .compact-card strong {
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    window.embeddedChatbotConfig = {
+    chatbotId: "7kLdH5kTT6mMNBmD0w3FL",
+    domain: "www.chatbase.co"
+    }
+</script>
+<script
+    src="https://www.chatbase.co/embed.min.js"
+    chatbotId="7kLdH5kTT6mMNBmD0w3FL"
+    domain="www.chatbase.co"
+    defer>
+</script> 
+
+{% endblock %}
