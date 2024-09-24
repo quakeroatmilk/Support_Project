@@ -1,0 +1,691 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: transparent; /* Remove the gray background */
+    margin: 0;
+    padding: 0; /* Remove top and bottom padding for a cleaner look */
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-shadow: none !important;
+    border: none !important;
+    background: none !important;
+}
+
+
+.header {
+    background: linear-gradient(to right, #62b9ec, #f9f9f9);
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    animation: backgroundShift 10s infinite alternate;
+}
+
+.header img {
+    max-width: 120px;
+    filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.2));
+    margin: 0 20px;
+    animation: bounceIn 1s ease-out;
+}
+
+.header img.jata-logo {
+    max-width: 80px;
+}
+
+.header-content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header-content h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #1A3353;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    animation: fadeInUp 1s ease-in-out forwards;
+    animation-delay: 0.5s;
+}
+
+.header-content h2 {
+    margin: 10px 0 0;
+    font-size: 14px;
+    color: #6a6a6a;
+    font-weight: 400;
+}
+
+.navbar a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #ffcc00;
+    text-decoration: underline;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+}
+
+select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #941919;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #780E0E;
+}
+
+.recommendation {
+    background-color: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.recommendation h3 {
+    margin: 0;
+    color: #007bff;
+    font-size: 16px;
+}
+
+.recommendation h3 a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.recommendation p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.recommendation .domain {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.footer {
+    background-color: #1A3353;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes backgroundShift {
+    0% {
+        background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+    }
+    100% {
+        background: linear-gradient(to bottom, #ffffff, #f1f1f1);
+    }
+}
+
+/* Keyframe Animation for Gradient Background Shift */
+@keyframes backgroundShift {
+    100% {
+        background: linear-gradient(to right, #62b9ec, #f9f9f9); /* Gradient transition */
+    }
+}
+
+select, input[type="number"], button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+select:focus, input[type="number"]:focus {
+    border-color: #1A3353;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #941919;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #780E0E;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.form-group {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+select, input[type="text"], input[type="email"], textarea, button, input[type="radio"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 80px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #941919;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #780E0E;
+}
+
+.rating-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.rating-group input[type="radio"] {
+    width: auto;
+    flex: 1;
+    margin-right: 5px;
+}
+
+.rating-group label {
+    flex: 1;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.prediction-result {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.prediction-result h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #333;
+}
+
+.progress-circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+}
+
+.progress-circle svg {
+    transform: rotate(-90deg);
+    width: 300%;
+    height: 300%;
+}
+
+.progress-circle circle {
+    fill: none;
+}
+
+.progress-circle .bg {
+    stroke: #eee;
+}
+
+.progress-circle .progress {
+    stroke: #1A3353;
+    stroke-linecap: butt; 
+    stroke-dasharray: 440;
+    stroke-dashoffset: calc(440 - (440 * {{ prediction }}) / 100);
+    transition: stroke-dashoffset 1s ease-out;
+}
+
+.progress-circle .text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #1A3353;
+    font-weight: bold;
+}
+
+.prediction-high {
+    border-left: 5px solid #28a745; /* Green */
+}
+
+.prediction-medium {
+    border-left: 5px solid #ffc107; /* Yellow */
+}
+
+.prediction-low {
+    border-left: 5px solid #dc3545; /* Red */
+}
+
+.prediction-explanation {
+    font-size: 16px;
+    color: #555;
+    margin-top: 10px;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes backgroundShift {
+    0% {
+        background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+    }
+    100% {
+        background: linear-gradient(to bottom, #ffffff, #f1f1f1);
+    }
+}
+
+/* Keyframe Animation for Gradient Background Shift */
+@keyframes backgroundShift {
+    
+    100% {
+        background: linear-gradient(to right, #62b9ec, #f9f9f9); /* Gradient transition */
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    .progress-circle {
+        width: 300px;
+        height: 300%;
+    }
+
+    .progress-circle .text {
+        font-size: 18px;
+    }
+}
+
+input[type="file"], button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+
+
+.result {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.result h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.result p {
+    font-size: 14px;
+    color: #555;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+select, input[type="text"], input[type="email"], textarea, button, input[type="radio"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 80px;
+}
+
+#sentiment-chart {
+    margin-top: 40px;
+}
+
+#graph, #rating-graph {
+    width: 100%;
+    height: 400px;
+}
+
+.feedback-summary {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.summary-box {
+    flex: 1 1 calc(33.333% - 10px);
+    background-color: #fafafa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 5px;
+    text-align: center;
+}
+
+.summary-box h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.summary-box p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1A3353;
+}
+
+.comments-section {
+    margin-top: 40px;
+}
+
+.comments-section h3 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #1A3353;
+    padding-bottom: 5px;
+}
+
+.comments-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.comments-list li {
+    background-color: #f4f4f4;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Charts and Summary Layout */
+.chart-container {
+    display: flex;                /* Use Flexbox layout */
+    justify-content: space-between; /* Add space between charts */
+    align-items: flex-start;       /* Align charts to the top */
+    gap: 20px;                    /* Add space between the charts */
+}
+
+.chart {
+    flex: 1;                      /* Allow both charts to take up equal space */
+    min-width: 45%;               /* Ensure each chart has a minimum width */
+    max-width: 45%;               /* Set the maximum width so charts stay side by side */
+    padding: 10px;                /* Add some padding around the charts */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Add a shadow for a cleaner look */
+    background-color: #f7f7f7;    /* Set a background color */
+    border-radius: 8px;           /* Make the corners slightly rounded */
+}
+
+@media screen and (max-width: 768px) {
+    .chart {
+        min-width: 100%;           /* Stack the charts on top of each other on small screens */
+        max-width: 100%;           /* Ensure full width on small screens */
+    }
+}
+
+.feedback-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.summary-box {
+    flex: 1;
+    padding: 15px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin: 0 10px;
+}
+
+.summary-box h4 {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.comments-list {
+    list-style: none;
+    padding-left: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.comments-list li {
+    background-color: #ffffff;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.prediction-result {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.prediction-result:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.prediction-result h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333;
+    font-weight: bold;
+}
+
+.prediction-explanation {
+    font-size: 16px;
+    color: #666;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prediction-explanation span {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.prediction-high {
+    border-left: 5px solid #28a745; /* Green */
+}
+
+.prediction-medium {
+    border-left: 5px solid #ffc107; /* Yellow */
+}
+
+.prediction-low {
+    border-left: 5px solid #dc3545; /* Red */
+}
+
+/* High success rate - Green */
+.progress-circle.high .progress {
+    stroke: #28a745; /* Green */
+}
+
+/* Medium success rate - Yellow */
+.progress-circle.medium .progress {
+    stroke: #ffc107; /* Yellow */
+}
+
+/* Low success rate - Red */
+.progress-circle.low .progress {
+    stroke: #dc3545; /* Red */
+}
+
+
+
+
+
+
+
+
+
