@@ -704,6 +704,38 @@ textarea {
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
+.manual-container {
+    margin: 20px;
+}
+
+.manual-section {
+    margin-bottom: 30px;
+}
+
+.manual-section h3 {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.manual-section p {
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.manual-images {
+    width: 100%;      /* Full width of the container */
+    max-width: 600px; /* Limit the image width to 600px */
+    height: auto;     /* Maintain aspect ratio */
+    display: block;
+    margin: 20px auto; /* Center the image with margin */
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+
+
+
+
 
 
 

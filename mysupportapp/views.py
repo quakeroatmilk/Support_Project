@@ -22,12 +22,8 @@ import spacy
 import pytesseract
 from PIL import Image
 from pdf2image import convert_from_path
-import pytesseract
-from .models import CorporateInfo, ShareCapital, Directors, Shareholders, FinancialInfo
+from .models import CorporateInfo, ShareCapital, Directors, Shareholders, FinancialInfo, UserManual
 from django.core.files.storage import FileSystemStorage
-import logging
-
-
 
 # Load sentiment analysis model
 sentiment_analysis = pipeline('sentiment-analysis')
@@ -123,13 +119,11 @@ def recommend(request):
 
 # Prediction Analysis
 def prediction_analysis(request):
-    print("Entered prediction_analysis view")  # Debugging statement
     business_types = label_encoders['Business Type'].inverse_transform(df['Business Type'].unique())
     industries = label_encoders['Industry'].inverse_transform(df['Industry'].unique())
     locations = label_encoders['Location'].inverse_transform(df['Location'].unique())
     
     if request.method == 'POST':
-        print("Form submitted")  # Debugging statement
         try:
             input_data = {
                 'Business Type': request.POST['business_type'],
@@ -156,16 +150,9 @@ def prediction_analysis(request):
             # Predict success rate
             prediction = model.predict(input_df)[0]
 
-            # Debugging print statement
-            print(f"Redirecting to prediction_result with value: {prediction}")
-
-            # Correct redirect statement
-            # return redirect(f"{reverse('prediction_result')}?prediction={prediction}")
             return redirect(f"/prediction-result/?prediction={prediction}")
         
-
         except Exception as e:
-            logging.error(f"Error during prediction: {e}")
             return render(request, 'prediction_analysis.html', {'error': str(e)})
 
     return render(request, 'prediction_analysis.html', {
@@ -297,293 +284,9 @@ def view_feedback(request):
         'average_rating': rounded_average_rating
     })
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG, filename='app.log', format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Specify the path to Poppler's bin directory (adjust this path based on your system)
-poppler_path = r'C:\poppler\Library\bin'  # Make sure this matches your Poppler installation path
-
-import os
-import re
-import logging
-import pytesseract
-import pdfplumber
-from pdf2image import convert_from_path
-
-# Set Tesseract and Poppler paths
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-poppler_path = r'C:\poppler\Library\bin'
-
-# # Function to preprocess and extract text from PDF using OCR and pdfplumber
-# def extract_text_and_layout_from_pdf(pdf_path):
-#     all_text = ""
-
-#     # First, try native PDF extraction using pdfplumber for better accuracy
-#     try:
-#         with pdfplumber.open(pdf_path) as pdf:
-#             for page in pdf.pages:
-#                 text = page.extract_text()
-#                 if text:
-#                     all_text += text + "\n"
-#                 else:
-#                     logging.warning(f"Empty text extracted from page {page.page_number}.")
-#     except Exception as e:
-#         logging.error(f"Error extracting text from PDF using pdfplumber: {e}")
-
-#     # If no text is found or insufficient data, use OCR
-#     if not all_text.strip():
-#         try:
-#             images = convert_from_path(pdf_path, dpi=300, poppler_path=poppler_path)
-#             for image in images:
-#                 text = pytesseract.image_to_string(image, config='--psm 6')  # psm 6 is for assuming a uniform block of text
-#                 logging.debug(f"OCR extracted text: {text}")
-#                 all_text += text + "\n"
-#         except Exception as e:
-#             logging.error(f"Error extracting text from PDF using OCR: {e}")
-    
-#     # Save extracted text for manual inspection (optional)
-#     with open('extracted_text_debug.txt', 'w') as debug_file:
-#         debug_file.write(all_text)
-    
-#     return all_text
-
-# # Function to parse the extracted text for corporate and financial info
-# def analyze_pdf_text(text):
-#     parsed_data = {
-#         'corporate_info': {},
-#         'financial_info': {}
-#     }
-
-#     # Split text into lines
-#     lines = text.splitlines()
-
-#     # Define robust patterns for corporate information
-#     corporate_patterns = {
-#         'company_name': r"Name\s*[:\-\–]?\s*(.+)",
-#         'company_number': r"Registration \s*No\s*[:\-\–]?\s*(.+)",
-#         'incorporation_date': r"Incorporation\s*Date\s*[:\-\–]?\s*(\d{2}-\d{2}-\d{4})",
-#         'registration_date': r"Registration\s*Date\s*[:\-\–]?\s*(\d{2}-\d{2}-\d{4})",
-#         'registered_address': r"Registered\s*Address\s*[:\-\–]?\s*(.+)",
-#         'business_address': r"Business\s*Address\s*[:\-\–]?\s*(.+)",
-#         'nature_of_business': r"Nature\s*of\s*Business\s*[:\-\–]?\s*(.+)"
-#     }
-
-#     # Process each line with regex patterns
-#     for line in lines:
-#         for key, pattern in corporate_patterns.items():
-#             match = re.search(pattern, line, re.IGNORECASE)
-#             if match and not parsed_data['corporate_info'].get(key):
-#                 parsed_data['corporate_info'][key] = match.group(1).strip()
-#                 logging.debug(f'Matched {key}: {parsed_data["corporate_info"][key]}')
-
-#     # Default values if fields are not found
-#     for key in corporate_patterns.keys():
-#         if key not in parsed_data['corporate_info']:
-#             parsed_data['corporate_info'][key] = "Not found"
-
-#     # Financial information regex patterns
-#     financial_patterns = {
-#         'non_current_assets': r"Non-current\s*assets\s*[:\-]?\s*([\d,\.]+)",
-#         'current_assets': r"Current\s*assets\s*[:\-]?\s*([\d,\.]+)",
-#         'non_current_liabilities': r"Non-current\s*liabilities\s*[:\-]?\s*([\d,\.]+)",
-#         'current_liabilities': r"Current\s*liabilities\s*[:\-]?\s*([\d,\.]+)",
-#         'share_capital': r"Share\s*Capital\s*[:\-]?\s*([\d,\.]+)",
-#         'retained_earnings': r"Retained\s*Earnings\s*[:\-]?\s*([\d,\.]+)",
-#         'revenue': r"Revenue\s*[:\-]?\s*([\d,\.]+)",
-#         'profit_before_tax': r"Profit/\(Loss\)\s*Before\s*Tax\s*[:\-]?\s*([\d,\.]+)",
-#         'profit_after_tax': r"Profit/\(Loss\)\s*After\s*Tax\s*[:\-]?\s*([\d,\.]+)",
-#         'total_issued': r"Share\s*Capital\s*[:\-]?\s*([\d,\.]+)"  # Regex for total issued share capital
-#     }
-
-#     # Extracting financial info
-#     for key, pattern in financial_patterns.items():
-#         match = re.search(pattern, text, re.IGNORECASE)
-#         if match:
-#             parsed_data['financial_info'][key] = match.group(1).strip()
-#         else:
-#             parsed_data['financial_info'][key] = "Not found"
-
-#     return parsed_data
-
-# # Django view to handle file upload and extraction
-# def organization_analytic(request):
-#     analysis = None
-
-#     if request.method == 'POST':
-#         if 'pdf_file' in request.FILES:
-#             pdf_file = request.FILES['pdf_file']
-#             pdf_dir = os.path.join(settings.BASE_DIR, 'uploads', 'pdfs')
-#             ocr_dir = os.path.join(settings.BASE_DIR, 'uploads', 'ocr')
-
-#             # Ensure directories exist
-#             os.makedirs(pdf_dir, exist_ok=True)
-#             os.makedirs(ocr_dir, exist_ok=True)
-
-#             # Save the uploaded PDF
-#             pdf_path = os.path.join(pdf_dir, pdf_file.name)
-#             with open(pdf_path, 'wb+') as destination:
-#                 for chunk in pdf_file.chunks():
-#                     destination.write(chunk)
-
-#             # Extract text from the PDF
-#             text = extract_text_and_layout_from_pdf(pdf_path)
-#             if text:
-#                 # Save extracted text for reference
-#                 ocr_filename = f"{os.path.splitext(pdf_file.name)[0]}.txt"
-#                 ocr_path = os.path.join(ocr_dir, ocr_filename)
-#                 with open(ocr_path, 'w') as ocr_file:
-#                     ocr_file.write(text)
-
-#                 # Analyze the text for structured data
-#                 analysis = analyze_pdf_text(text)
-
-#                 # Save Corporate Info
-#                 corporate_info = analysis.get('corporate_info', {})
-#                 if corporate_info:
-#                     corp_info = CorporateInfo.objects.create(
-#                         company_name=corporate_info.get('company_name', 'Not found'),
-#                         company_number=corporate_info.get('company_number', 'Not found'),
-#                         incorporation_date=corporate_info.get('incorporation_date', 'Not found'),
-#                         registration_date=corporate_info.get('registration_date', 'Not found'),
-#                         registered_address=corporate_info.get('registered_address', 'Not found'),
-#                         business_address=corporate_info.get('business_address', 'Not found'),
-#                         nature_of_business=corporate_info.get('nature_of_business', 'Not found')
-#                     )
-
-#                 # Save Share Capital and Financial Info
-#                 share_capital = analysis['financial_info'].get('share_capital', 'Not found')
-#                 if share_capital != 'Not found':
-#                     ShareCapital.objects.create(
-#                         company_name=corp_info.company_name,
-#                         total_issued=share_capital
-#                     )
-
-#                 # Save Financial Information
-#                 fin_info = analysis.get('financial_info', {})
-#                 FinancialInfo.objects.create(
-#                     company_name=corp_info.company_name,
-#                     non_current_assets=fin_info.get('non_current_assets', 'Not found'),
-#                     current_assets=fin_info.get('current_assets', 'Not found'),
-#                     non_current_liabilities=fin_info.get('non_current_liabilities', 'Not found'),
-#                     current_liabilities=fin_info.get('current_liabilities', 'Not found'),
-#                     share_capital=fin_info.get('share_capital', 'Not found'),
-#                     retained_earnings=fin_info.get('retained_earnings', 'Not found'),
-#                     revenue=fin_info.get('revenue', 'Not found'),
-#                     profit_before_tax=fin_info.get('profit_before_tax', 'Not found'),
-#                     profit_after_tax=fin_info.get('profit_after_tax', 'Not found')
-#                 )
-#             else:
-#                 logging.error("Text extraction failed, no text found.")
-#         else:
-#             logging.error("No PDF file found in the request")
-
-#     return render(request, 'organization_analytics.html', {'analysis': analysis})
-
-# from datetime import datetime
-
-# def calculate_company_age(incorporation_date_str):
-#     """Calculate the age of the company based on the incorporation date."""
-#     try:
-#         # Define the date format (DD-MM-YYYY) as used in the input string
-#         incorporation_date = datetime.strptime(incorporation_date_str, "%d-%m-%Y")
-#         # Get the current date
-#         current_date = datetime.now()
-#         # Calculate the difference in years
-#         age_in_years = current_date.year - incorporation_date.year
-
-#         # Adjust for cases where the incorporation date hasn't occurred yet this year
-#         if (current_date.month, current_date.day) < (incorporation_date.month, incorporation_date.day):
-#             age_in_years -= 1
-
-#         return age_in_years
-#     except ValueError:
-#         return "Invalid Date"
-
-# # Update the organization_analytic view to calculate and pass the company age
-# def organization_analytic(request):
-#     analysis = None
-
-#     if request.method == 'POST':
-#         if 'pdf_file' in request.FILES:
-#             pdf_file = request.FILES['pdf_file']
-#             pdf_dir = os.path.join(settings.BASE_DIR, 'uploads', 'pdfs')
-#             ocr_dir = os.path.join(settings.BASE_DIR, 'uploads', 'ocr')
-
-#             # Ensure directories exist
-#             os.makedirs(pdf_dir, exist_ok=True)
-#             os.makedirs(ocr_dir, exist_ok=True)
-
-#             # Save the uploaded PDF
-#             pdf_path = os.path.join(pdf_dir, pdf_file.name)
-#             with open(pdf_path, 'wb+') as destination:
-#                 for chunk in pdf_file.chunks():
-#                     destination.write(chunk)
-
-#             # Extract text from the PDF
-#             text = extract_text_and_layout_from_pdf(pdf_path)
-#             if text:
-#                 # Save extracted text for reference
-#                 ocr_filename = f"{os.path.splitext(pdf_file.name)[0]}.txt"
-#                 ocr_path = os.path.join(ocr_dir, ocr_filename)
-#                 with open(ocr_path, 'w') as ocr_file:
-#                     ocr_file.write(text)
-
-#                 # Analyze the text for structured data
-#                 analysis = analyze_pdf_text(text)
-
-#                 # Calculate Company Age
-#                 incorporation_date_str = analysis.get('corporate_info', {}).get('incorporation_date', None)
-#                 company_age = calculate_company_age(incorporation_date_str)
-
-#                 # Save Corporate Info
-#                 corporate_info = analysis.get('corporate_info', {})
-#                 if corporate_info:
-#                     corp_info = CorporateInfo.objects.create(
-#                         company_name=corporate_info.get('company_name', 'Not found'),
-#                         company_number=corporate_info.get('company_number', 'Not found'),
-#                         incorporation_date=corporate_info.get('incorporation_date', 'Not found'),
-#                         registration_date=corporate_info.get('registration_date', 'Not found'),
-#                         registered_address=corporate_info.get('registered_address', 'Not found'),
-#                         business_address=corporate_info.get('business_address', 'Not found'),
-#                         nature_of_business=corporate_info.get('nature_of_business', 'Not found')
-#                     )
-
-#                 # Save Share Capital and Financial Info
-#                 share_capital = analysis['financial_info'].get('share_capital', 'Not found')
-#                 if share_capital != 'Not found':
-#                     ShareCapital.objects.create(
-#                         company_name=corp_info.company_name,
-#                         total_issued=share_capital
-#                     )
-
-#                 # Save Financial Information
-#                 fin_info = analysis.get('financial_info', {})
-#                 FinancialInfo.objects.create(
-#                     company_name=corp_info.company_name,
-#                     non_current_assets=fin_info.get('non_current_assets', 'Not found'),
-#                     current_assets=fin_info.get('current_assets', 'Not found'),
-#                     non_current_liabilities=fin_info.get('non_current_liabilities', 'Not found'),
-#                     current_liabilities=fin_info.get('current_liabilities', 'Not found'),
-#                     share_capital=fin_info.get('share_capital', 'Not found'),
-#                     retained_earnings=fin_info.get('retained_earnings', 'Not found'),
-#                     revenue=fin_info.get('revenue', 'Not found'),
-#                     profit_before_tax=fin_info.get('profit_before_tax', 'Not found'),
-#                     profit_after_tax=fin_info.get('profit_after_tax', 'Not found')
-#                 )
-
-#                 # Add company age to the analysis result
-#                 analysis['company_age'] = company_age
-
-#             else:
-#                 logging.error("Text extraction failed, no text found.")
-#         else:
-#             logging.error("No PDF file found in the request")
-
-#     return render(request, 'organization_analytics.html', {'analysis': analysis})
-
+# Functions for PDF and Company Analysis
 from datetime import datetime
 
-### PDF and Company Analysis ###
 def extract_text_from_pdf(pdf_path):
     """Extract text from PDF using pdfplumber and Tesseract OCR as fallback."""
     extracted_text = ""
@@ -593,8 +296,8 @@ def extract_text_from_pdf(pdf_path):
                 text = page.extract_text()
                 if text:
                     extracted_text += text + "\n"
-    except Exception as e:
-        logging.error(f"Error extracting text with pdfplumber: {e}")
+    except Exception:
+        pass
 
     # Use OCR if no text found
     if not extracted_text.strip():
@@ -603,8 +306,8 @@ def extract_text_from_pdf(pdf_path):
             for image in images:
                 text = pytesseract.image_to_string(image, config='--psm 6')
                 extracted_text += text + "\n"
-        except Exception as e:
-            logging.error(f"OCR extraction failed: {e}")
+        except Exception:
+            pass
 
     return extracted_text
 
@@ -708,7 +411,144 @@ def organization_analytic(request):
             else:
                 return render(request, 'upload_pdf.html', {'error': 'PDF extraction failed.'})
         else:
-            logging.error("No PDF file uploaded.")
             return render(request, 'upload_pdf.html', {'error': 'No PDF file uploaded.'})
     return render(request, 'upload_pdf.html')
 
+
+# View for the User Manual
+def user_manual(request):
+    manual_sections = [
+        {
+            "title": "1. Recommendation System",
+            "content": """
+                This module provides personalized recommendations based on the selected business type.
+                
+                <ul>
+                    <li>Navigate to the <strong>Recommendation</strong> tab.</li>
+                    <li>Choose a business type from the drop-down menu (e.g., SMEs, Startups, Cooperatives).</li>
+                    <li>Click on <strong>Get Recommendations</strong>.</li>
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/rec_1.png")),
+                request.build_absolute_uri(static("images/rec_2.png")),
+                request.build_absolute_uri(static("images/rec_3.png")),
+            ]
+        },
+        {
+            "title": "2. Prediction Analytics",
+            "content": """
+                This module predicts your business's success rate based on the support received.
+                
+                <ul>
+                    <li>Navigate to the Prediction Analysis tab.</li>
+                    <li>Fill in the required details such as:</li>
+                        <ul>
+                            <li>Business Type</li>
+                            <li>Industry</li>
+                            <li>Grant Amount</li>
+                            <li>Number of Trainings</li>
+                            <li>Advisory Sessions, etc.</li>
+                        </ul>
+                    <li>Click on Submit to get the predicted success rate.</li>
+                    <li>The system will display the predicted success rate, suggestions and how to improve on the Prediction Result page.</li>
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/pre_1.png")),
+                request.build_absolute_uri(static("images/pre_2.png")),
+                request.build_absolute_uri(static("images/pre_3.png")),
+                request.build_absolute_uri(static("images/pre_4.png")),
+            ]
+        },
+        {
+            "title": "3. Organization Analytics",
+            "content": """
+                This module extracts and analyzes corporate and financial data from uploaded PDFs.
+                
+                <ul>
+                    <li>Navigate to the Organization Analytics tab.</li>
+                    <li>Upload a PDF containing your business’s corporate information or financial statements.</li>
+                    <li>The system also calculates the age of the company and provides an evaluation (e.g., Young Startup, Growing Business, Established Company).</li>
+                    <li>The system will extract key data such as:</li>
+                        <ul>
+                            <li>Company Name</li>
+                            <li>Incorporation Date</li>
+                            <li>Share Capital</li>
+                            <li>Revenue, Assets, Liabilities, etc.</li>
+                        </ul> 
+                    <li>You can review the extracted data on the results page after the PDF upload.</li>                       
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/org_1.png")),
+                request.build_absolute_uri(static("images/org_2.png")),
+                request.build_absolute_uri(static("images/org_3.png")),
+                request.build_absolute_uri(static("images/org_4.png")),
+            ]
+        },
+        {
+            "title": "4. Data Analytics",
+            "content": """
+                This module provides visual analytics of the profile data collected by the system.
+                
+                <ul>
+                    <li>Navigate to the Data Analytics tab.</li>
+                    <li>The system will display an interactive chart showing the total amount of support received by location and agency.</li>
+                    <li>You can filter the data using the options provided by the chart interface to explore different aspects of the data.</li>                 
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/data_1.png")),
+                request.build_absolute_uri(static("images/data_2.png")),
+            ]
+        },
+        {
+            "title": "5. User Feedback & Sentiment Analysis",
+            "content": """
+                You can provide feedback on the recommendations and predictions received.
+                
+                <ul>
+                    <li>Navigate to the User Feedback tab.</li>
+                    <li>Fill in your name, email, feedback type (e.g., Recommendation, Prediction), rating, and comments.</li>
+                    <li>Click on Submit Feedback.</li>
+                    <li>The system will analyze your feedback sentiment (Positive, Negative, Neutral) using AI.</li> 
+                    <li>You can view the sentiment analysis results and top feedbacks on the View Feedback page. Bar charts display the sentiment percentages, and you can also see the average user rating.</li>                 
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/feed_1.png")),
+                request.build_absolute_uri(static("images/feed_2.png")),
+                request.build_absolute_uri(static("images/feed_3.png")),
+            ]
+        }
+    ]
+    
+    return render(request, 'user_manual.html', {'manual_sections': manual_sections})
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+
+def render_to_pdf(template_src, context_dict={}):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = HttpResponse(content_type='application/pdf')
+    pisa_status = pisa.CreatePDF(html, dest=result)
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return result
+
+def download_user_manual_pdf(request):
+    # Reuse the same context from the user_manual view
+    manual_sections = [
+        # same content as in your user_manual function
+    ]
+    context = {'manual_sections': manual_sections}
+    pdf = render_to_pdf('user_manual_pdf.html', context)
+    return pdf

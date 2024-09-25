@@ -78,3 +78,14 @@ class FinancialInfo(models.Model):
     revenue = models.CharField(max_length=100)
     profit_before_tax = models.CharField(max_length=100)
     profit_after_tax = models.CharField(max_length=100)
+
+
+class UserManual(models.Model):
+    section_title = models.CharField(max_length=255)
+    content = models.TextField()  # This stores the text instructions.
+    image = models.ImageField(upload_to='manual_images/', null=True, blank=True)  # Optional image.
+
+    def __str__(self):
+        return self.section_title
+
+

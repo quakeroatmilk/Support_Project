@@ -1,5 +1,6 @@
 from django.urls import path
 from mysupportapp import views
+from .views import download_user_manual_pdf
 
 urlpatterns = [
     path('', views.recommendation_system, name='recommendation_system'),
@@ -10,5 +11,7 @@ urlpatterns = [
     path('view-feedback/', views.view_feedback, name='view_feedback'),
     path('profile-analytics/', views.profile_analytics, name='profile_analytics'),
     path('organization_analytics/', views.organization_analytic, name='organization_analytics'),
-    path('upload-pdf/', views.organization_analytic, name='upload_pdf')
+    path('upload-pdf/', views.organization_analytic, name='upload_pdf'),
+    path('user-manual/', views.user_manual, name='user_manual'),
+    path('download-user-manual-pdf/', download_user_manual_pdf, name='download_user_manual_pdf')
 ]

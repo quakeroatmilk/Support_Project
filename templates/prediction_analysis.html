@@ -37,19 +37,19 @@
                 </div>
                 <div class="form-group">
                     <label for="years_in_operation">Years in Operation:</label>
-                    <input type="number" id="years_in_operation" name="years_in_operation" placeholder="Enter years in operation" value="{{ years_in_operation }}" required>
+                    <input type="number" id="years_in_operation" name="years_in_operation" placeholder="Enter years in operation" value="{{ years_in_operation }}" min="0" step="1" required>
                 </div>
                 <div class="form-group">
                     <label for="grant_amount">Grant Amount:</label>
-                    <input type="number" id="grant_amount" name="grant_amount" placeholder="Enter grant amount (MYR)" value="{{ grant_amount }}" required>
+                    <input type="number" id="grant_amount" name="grant_amount" placeholder="Enter grant amount (MYR)" value="{{ grant_amount }}" min="0" step="1" required>
                 </div>
                 <div class="form-group">
                     <label for="number_of_trainings">Number of Trainings:</label>
-                    <input type="number" id="number_of_trainings" name="number_of_trainings" placeholder="Enter number of trainings" value="{{ number_of_trainings }}" required>
+                    <input type="number" id="number_of_trainings" name="number_of_trainings" placeholder="Enter number of trainings" value="{{ number_of_trainings }}" min="0" step="1" required>
                 </div>
                 <div class="form-group">
                     <label for="advisory_sessions">Advisory Sessions:</label>
-                    <input type="number" id="advisory_sessions" name="advisory_sessions" placeholder="Enter number of advisory sessions" value="{{ advisory_sessions }}" required>
+                    <input type="number" id="advisory_sessions" name="advisory_sessions" placeholder="Enter number of advisory sessions" value="{{ advisory_sessions }}" min="0" step="1" required>
                 </div>
                 <div class="form-group">
                     <label for="microfinancing">Microfinancing:</label>
