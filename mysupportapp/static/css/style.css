@@ -723,12 +723,12 @@ textarea {
 }
 
 .manual-images {
-    width: 100%;      /* Full width of the container */
-    max-width: 600px; /* Limit the image width to 600px */
+    width: 80%;      /* Full width of the container */
+    max-width: 500px; /* Limit the image width to 600px */
     height: auto;     /* Maintain aspect ratio */
     display: block;
     margin: 20px auto; /* Center the image with margin */
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     padding: 5px;
 }
 

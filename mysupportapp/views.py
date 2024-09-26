@@ -414,9 +414,9 @@ def organization_analytic(request):
             return render(request, 'upload_pdf.html', {'error': 'No PDF file uploaded.'})
     return render(request, 'upload_pdf.html')
 
-
 # View for the User Manual
 def user_manual(request):
+    print("User manual view called")  # Debugging line
     manual_sections = [
         {
             "title": "1. Recommendation System",
@@ -528,7 +528,7 @@ def user_manual(request):
             ]
         }
     ]
-    
+    print(manual_sections)
     return render(request, 'user_manual.html', {'manual_sections': manual_sections})
 
 from django.http import HttpResponse
@@ -545,10 +545,133 @@ def render_to_pdf(template_src, context_dict={}):
     return result
 
 def download_user_manual_pdf(request):
-    # Reuse the same context from the user_manual view
+    # Define the sections of the user manual (similar to what is displayed on the HTML page)
     manual_sections = [
-        # same content as in your user_manual function
+        {
+            "title": "1. Recommendation System",
+            "content": """
+                This module provides personalized recommendations based on the selected business type.
+                
+                <ul>
+                    <li>Navigate to the Recommendation tab.</li>
+                    <li>Choose a business type from the drop-down menu (e.g., SMEs, Startups, Cooperatives).</li>
+                    <li>Click on Get Recommendations.</li>
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/rec_1.png")),
+                request.build_absolute_uri(static("images/rec_2.png")),
+                request.build_absolute_uri(static("images/rec_3.png")),
+            ]
+        },
+        {
+            "title": "2. Prediction Analytics",
+            "content": """
+                This module predicts your business's success rate based on the support received.
+                
+                <ul>
+                    <li>Navigate to the Prediction Analysis tab.</li>
+                    <li>Fill in the required details such as:</li>
+                        <ul>
+                            <li>Business Type</li>
+                            <li>Industry</li>
+                            <li>Grant Amount</li>
+                            <li>Number of Trainings</li>
+                            <li>Advisory Sessions, etc.</li>
+                        </ul>
+                    <li>Click on Submit to get the predicted success rate.</li>
+                    <li>The system will display the predicted success rate, suggestions and how to improve on the Prediction Result page.</li>
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/pre_1.png")),
+                request.build_absolute_uri(static("images/pre_2.png")),
+                request.build_absolute_uri(static("images/pre_3.png")),
+                request.build_absolute_uri(static("images/pre_4.png")),
+            ]
+        },
+        {
+            "title": "3. Organization Analytics",
+            "content": """
+                This module extracts and analyzes corporate and financial data from uploaded PDFs.
+                
+                <ul>
+                    <li>Navigate to the Organization Analytics tab.</li>
+                    <li>Upload a PDF containing your business’s corporate information or financial statements.</li>
+                    <li>The system also calculates the age of the company and provides an evaluation (e.g., Young Startup, Growing Business, Established Company).</li>
+                    <li>The system will extract key data such as:</li>
+                        <ul>
+                            <li>Company Name</li>
+                            <li>Incorporation Date</li>
+                            <li>Share Capital</li>
+                            <li>Revenue, Assets, Liabilities, etc.</li>
+                        </ul> 
+                    <li>You can review the extracted data on the results page after the PDF upload.</li>                       
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/org_1.png")),
+                request.build_absolute_uri(static("images/org_2.png")),
+                request.build_absolute_uri(static("images/org_3.png")),
+                request.build_absolute_uri(static("images/org_4.png")),
+            ]
+        },
+        {
+            "title": "4. Data Analytics",
+            "content": """
+                This module provides visual analytics of the profile data collected by the system.
+                
+                <ul>
+                    <li>Navigate to the Data Analytics tab.</li>
+                    <li>The system will display an interactive chart showing the total amount of support received by location and agency.</li>
+                    <li>You can filter the data using the options provided by the chart interface to explore different aspects of the data.</li>                 
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/data_1.png")),
+                request.build_absolute_uri(static("images/data_2.png")),
+            ]
+        },
+        {
+            "title": "5. User Feedback & Sentiment Analysis",
+            "content": """
+                You can provide feedback on the recommendations and predictions received.
+                
+                <ul>
+                    <li>Navigate to the User Feedback tab.</li>
+                    <li>Fill in your name, email, feedback type (e.g., Recommendation, Prediction), rating, and comments.</li>
+                    <li>Click on Submit Feedback.</li>
+                    <li>The system will analyze your feedback sentiment (Positive, Negative, Neutral) using AI.</li> 
+                    <li>You can view the sentiment analysis results and top feedbacks on the View Feedback page. Bar charts display the sentiment percentages, and you can also see the average user rating.</li>                 
+                </ul>
+                
+            """,
+            "images": [
+                request.build_absolute_uri(static("images/feed_1.png")),
+                request.build_absolute_uri(static("images/feed_2.png")),
+                request.build_absolute_uri(static("images/feed_3.png")),
+            ]
+        }
     ]
+
+    # Prepare context for the PDF template
     context = {'manual_sections': manual_sections}
+    
+    # Render the PDF
     pdf = render_to_pdf('user_manual_pdf.html', context)
     return pdf
+
+def pdf_download_page(request):
+    # You can pass any context if needed
+    return render(request, 'pdf_download_page.html', {})
+
+
+
+
+
+
+

@@ -2,47 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Manual PDF</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        h2 {
-            color: #007bff;
-        }
-        img {
-            width: 100%;
-            max-width: 600px;
-            height: auto;
-            margin-bottom: 20px;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
-    <h2>User Manual</h2>
+    <center><h1 style="font-size: 20px;">User Manual</h1></center>
 
-    <div class="manual-container">
-        {% for section in manual_sections %}
-            <div class="manual-section">
-                <h3>{{ section.title }}</h3>
-                <p>{{ section.content|safe }}</p>
+    <div class="manual-container" style="margin-left: 30px; margin-right: 30px; font-size: 15px;">
+    {% for section in manual_sections %}
+        <div class="manual-section">
+            <h3>{{ section.title }}</h3>
+            <p>{{ section.content|safe }}</p>
 
-                {% if section.images %}
-                    <div class="manual-images">
-                        {% for image in section.images %}
-                        <img src="{{ image }}" alt="{{ section.title }} screenshot">
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    </div>
+            {% if section.images %}
+                <div class="manual-images">
+                    {% for image in section.images %}
+                    <img src="{{ image }}" alt="{{ section.title }} screenshot"
+                    style="width: 100%; max-width: 600px; height: auto; display: block; margin: 20px auto; padding: 5px;">
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
 </body>
 </html>
