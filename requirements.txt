@@ -20,3 +20,4 @@ pdf2image
 spacy
 gunicorn
 xhtml2pdf
+gevent
